@@ -1,0 +1,46 @@
+package service
+
+import (
+	"github.com/mooncake9527/orange-core/core/base"
+	"github.com/mooncake9527/x/xerrors/xerror"
+    "gorm.io/gorm"
+)
+
+type {{.ClassName}}Service struct {
+	*base.BaseService
+}
+
+var Ser{{.ClassName}} = {{.ClassName}}Service{
+	base.NewService("{{.ConfDbName}}"),
+}
+
+
+func (x *{{.ClassName}}Service) Create(data *models.{{.ClassName}}) error {
+	err := x.DB().Create(data).Error
+	if err != nil {
+		return xerror.New(err.Error())
+	}
+	return nil
+}
+
+func (x *{{.ClassName}}Service) GetAll(list *[]*models.{{.ClassName}}) (err error) {
+	err = x.DB().Model(&models.{{.ClassName}}{}).Find(list).Error
+	if err != nil {
+		return xerror.Wrap(err, "query {{.ClassName}} all error")
+	}
+	return nil
+}
+
+func (x *{{.ClassName}}Service) Get(req, u *models.{{.ClassName}}) (err error) {
+	q := x.DB()
+	if req.Id != 0 {
+		q = q.Where("id=?", req.Id)
+	}
+	err = q.First(&u).Error
+	if err != nil  {
+		return xerror.Wrap(err, "query {{.ClassName}} error")
+	}
+	return nil
+}
+
+

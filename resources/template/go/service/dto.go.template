@@ -1,0 +1,77 @@
+package dto
+
+import (
+    {{- $bb := false -}}
+    {{- range .Columns -}}
+        {{- $z := .IsQuery -}}
+        {{- if ($z) -}}
+            {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+        {{- end -}}
+
+        {{$x := .Pk}}
+        {{- if ($x) -}}
+        {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+        {{- else if eq .GoField "CreatedAt" -}}
+        {{- else if eq .GoField "UpdatedAt" -}}
+        {{- else if eq .GoField "DeletedAt" -}}
+        {{- else if eq .GoField "CreateBy" -}}
+        {{- else if eq .GoField "UpdateBy" -}}{{- else -}}
+        {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+        {{- end -}}
+    {{- end -}}
+    {{- if eq $bb true }}
+    "time"
+    {{- end }}
+    "github.com/mooncake9527/orange-core/common/request"
+    "github.com/mooncake9527/orange-core/core/base"
+    "orange/modules/{{.PackageName}}/models"
+)
+
+type {{.ClassName}}GetPageReq struct {
+	// base.ReqPage `query:"-"`
+	request.Pagination `query:"-"`
+    {{- $tablename := .TBName -}}
+    {{- range .Columns -}}
+    {{$z := .IsQuery}}
+    {{- if ($z) -}}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" form:"{{.JsonField}}" query:"column:{{.ColumnName}}"` //{{.ColumnComment}}
+    {{- end }}
+    {{- $x := .Pk -}}
+    {{ if ($x) }}
+    SortOrder  string `json:"-" query:"type:order;column:{{.ColumnName}}"`
+    {{ end -}}
+    {{- end }}
+}
+
+func (x *{{.ClassName}}GetPageReq) Valid() error {
+
+	return nil
+}
+
+func ({{.ClassName}}GetPageReq) TableName() string {
+	return models.TB{{.ClassName}}
+}
+
+
+//{{.TableComment}}
+type {{.ClassName}}Req struct {
+    {{ range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" form:"{{.JsonField}}"` //主键
+    {{- else if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "UpdatedAt" -}}
+    {{- else if eq .GoField "DeletedAt" -}}
+    {{- else if eq .GoField "CreateBy" -}}
+    {{- else if eq .GoField "UpdateBy" -}}
+    {{- else }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" form:"{{.JsonField}}"` //{{.ColumnComment}} {{end -}}
+    {{- end }}
+}
+
+func (x *{{.ClassName}}Req) Valid() error {
+
+	return nil
+}
+
+

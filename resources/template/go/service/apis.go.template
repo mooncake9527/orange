@@ -1,0 +1,161 @@
+package apis
+
+import (
+	"github.com/mooncake9527/orange/modules/{{.PackageName}}/models"
+	"github.com/mooncake9527/orange/modules/{{.PackageName}}/service"
+	"github.com/mooncake9527/orange/modules/{{.PackageName}}/service/dto"
+
+	"github.com/mooncake9527/orange-core/core/base"
+	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/copier"
+	"github.com/mooncake9527/orange-core/common/apis"
+)
+
+type {{.ClassName}}Api struct {
+	apis.NApi
+}
+
+var Api{{.ClassName}} = {{.ClassName}}Api{}
+
+// QueryPage 获取{{.TableComment}}列表
+// @Summary 获取{{.TableComment}}列表
+// @Tags {{.PackageName}}-{{.ClassName}}
+// @Accept application/json
+// @Product application/json
+// @Param data body dto.{{.ClassName}}GetPageReq true "body"
+// @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.{{.ClassName}}}} "{"code": 200, "data": [...]}"
+// @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/page [post]
+// @Security Bearer
+func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
+	var req dto.{{.ClassName}}GetPageReq
+    if err := e.Bind(c, &req); err != nil {
+        e.ParamError(c, err)
+        return
+    }
+    if err := req.Valid(); err != nil {
+        e.ParamError(c, err)
+        return
+    }
+	list := make([]models.{{.ClassName}}, 0, req.GetSize())
+	var total int64
+
+	if req.SortOrder == "" {
+		req.SortOrder = "desc"
+	}
+
+	if err := service.Ser{{.ClassName}}.QueryPage(req, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.PageOK(c, list, total, req.GetPage(), req.GetSize())
+}
+
+// Get 获取{{.TableComment}}
+// @Summary 获取{{.TableComment}}
+// @Tags {{.PackageName}}-{{.ClassName}}
+// @Accept application/json
+// @Product application/json
+// @Param data body dto.{{.ClassName}}Req true "body"
+// @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
+// @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/get [post]
+// @Security Bearer
+func (e *{{.ClassName}}Api) Get(c *gin.Context) {
+	var req dto.{{.ClassName}}Req
+    if err := e.Bind(c, &req); err != nil {
+        e.ParamError(c, err)
+        return
+    }
+    if err := req.Valid(); err != nil {
+        e.ParamError(c, err)
+        return
+    }
+    var condition models.{{.ClassName}}
+    _ = copier.CopyWithOption(&condition, &req, copier.Option{IgnoreEmpty: true})
+	var data models.{{.ClassName}}
+	if err := service.Ser{{.ClassName}}.Get(&condition, &data); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.OK(c, data)
+}
+
+// Create 创建{{.TableComment}}
+// @Summary 创建{{.TableComment}}
+// @Tags {{.PackageName}}-{{.ClassName}}
+// @Accept application/json
+// @Product application/json
+// @Param data body dto.{{.ClassName}}Req true "body"
+// @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
+// @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/create [post]
+// @Security Bearer
+func (e *{{.ClassName}}Api) Create(c *gin.Context) {
+	var req dto.{{.ClassName}}Req
+    if err := e.Bind(c, &req); err != nil {
+        e.ParamError(c, err)
+        return
+    }
+    if err := req.Valid(); err != nil {
+        e.ParamError(c, err)
+        return
+    }
+	var data models.{{.ClassName}}
+	_ = copier.Copy(&data, req)
+	if err := service.Ser{{.ClassName}}.Create(&data); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.OK(c, data)
+}
+
+// Update 更新{{.TableComment}}
+// @Summary 更新{{.TableComment}}
+// @Tags {{.PackageName}}-{{.ClassName}}
+// @Accept application/json
+// @Product application/json
+// @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
+// @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/update [post]
+// @Security Bearer
+func (e *{{.ClassName}}Api) Update(c *gin.Context) {
+	var req dto.{{.ClassName}}Req
+    if err := e.Bind(c, &req); err != nil {
+        e.ParamError(c, err)
+        return
+    }
+    if err := req.Valid(); err != nil {
+        e.ParamError(c, err)
+        return
+    }
+	var data models.{{.ClassName}}
+	_ = copier.Copy(&data, req)
+	if err := service.Ser{{.ClassName}}.UpdateById(&data); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.OK(c, data)
+}
+
+// Del 删除{{.TableComment}}
+// @Summary 删除{{.TableComment}}
+// @Tags {{.PackageName}}-{{.ClassName}}
+// @Accept application/json
+// @Product application/json
+// @Param data body base.ReqIds true "body"
+// @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
+// @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/del [post]
+// @Security Bearer
+func (e *{{.ClassName}}Api) Del(c *gin.Context) {
+	var req base.ReqIds
+    if err := e.Bind(c, &req); err != nil {
+        e.ParamError(c, err)
+        return
+    }
+    if err := req.Valid(); err != nil {
+        e.ParamError(c, err)
+        return
+    }
+	if err := service.Ser{{.ClassName}}.DelIds(&models.{{.ClassName}}{}, req.Ids); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.OK(c,nil)
+}
