@@ -29,6 +29,10 @@ RPC 框架 grpc （开发中）
 持续集成部署 CICD jenkins, docker, kubernetes
 ```
 
+#### 使用orange脚手架快速开发项目
+
+[使用orange脚手架快速开发项目](./doc/how%20to%20use.md)
+
 
 
 

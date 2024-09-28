@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-// 统一下单接口
+// OrderReq 统一下单接口
 type OrderReq struct {
 	AppId        string `json:"appId" `        //商户Appid（终端号）
 	MerchantNo   string `json:"merchantNo"`    //商户号
@@ -43,7 +43,7 @@ type OrderRsp struct {
 	Data  interface{}
 }
 
-// 预付订单返回
+// OrderPreResp 预付订单返回
 type OrderPreResp struct {
 	OutTradeNo  string `json:"outTradeNo" ` //系统平台唯一订单号
 	AppTraceNo  string `json:"appTraceNo" ` //终端流水号(终端订单号)
@@ -55,7 +55,7 @@ type OrderPreResp struct {
 	Ext         any    `json:"ext"`         //扩张
 }
 
-// 订单回调信息
+// OrderResp 订单回调信息
 type OrderResp struct {
 	MerchantNo string `json:"merchantNo" ` //商户号
 	AppId      string `json:"appId" `      //商户Appid（终端号）
@@ -63,7 +63,7 @@ type OrderResp struct {
 	Body       string `json:"body"`        //订单信息 OrderInfoResp
 }
 
-// 回调订单信息
+// OrderInfoResp 回调订单信息
 type OrderInfoResp struct {
 	OutTradeNo  string      `json:"outTradeNo" ` //支付系统平台唯一订单号
 	AppTraceNo  string      `json:"appTraceNo" ` //终端流水号(终端订单号) 本系统订单号
@@ -176,10 +176,6 @@ func GenSign(req OrderReq) ([]byte, error) {
 	if err != nil {
 		return nil, xerror.Wrap(err, "pay sign err")
 	}
-	//if err := RSA_Verify(global.GVA_CONFIG.PayConfig.PubKey, []byte(str), sign); err != nil {
-	//	fmt.Println("v err")
-	//	fmt.Println(err)
-	//}
 	return sign, nil
 }
 
@@ -190,9 +186,5 @@ func GenGetSign(req GetOrderReq) ([]byte, error) {
 		fmt.Println("sign err")
 		fmt.Println(err)
 	}
-	//if err := RSA_Verify(global.GVA_CONFIG.PayConfig.PubKey, []byte(str), sign); err != nil {
-	//	fmt.Println("v err")
-	//	fmt.Println(err)
-	//}
 	return sign, nil
 }

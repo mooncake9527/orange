@@ -36,15 +36,6 @@ func GetReqId(c *gin.Context) string {
 	return reqId
 }
 
-func GetSub(c *gin.Context) int {
-	return getFromCtx[int](c, CtxKeySub)
-}
-
-// GetCompanyId 获取企业company的uuid
-func GetCompanyId(c *gin.Context) string {
-	return getFromCtx[string](c, CtxKeyCompanyId)
-}
-
 func getFromCtx[T any](c *gin.Context, key string) T {
 	var dft T // default value
 	val, exists := c.Get(key)

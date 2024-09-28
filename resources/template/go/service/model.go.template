@@ -18,12 +18,12 @@ import (
     
 )
 
-//{{.TableComment}}
+//{{.ClassName}} {{.TableComment}}
 type {{.ClassName}} struct {
     {{- range .Columns -}}
     {{$x := .Pk}}
     {{- if ($x) }}
-    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};primaryKey;autoIncrement;comment:主键"` //主键
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}"  form:"{{.JsonField}}"  gorm:"type:{{.ColumnType}};primaryKey;autoIncrement;comment:主键"` //主键
     {{- else if eq .GoField "UpdatedAt" }}
     UpdatedAt *time.Time `json:"updatedAt" form:"updatedAt" gorm:"type:datetime;comment:更新时间"`      //更新时间
     {{- else if eq .GoField "DeletedAt" }}

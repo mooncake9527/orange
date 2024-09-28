@@ -11,7 +11,7 @@ import (
 	"fmt"
 )
 
-// 将RSA私钥转换为byte
+// PrivateKeyToPem 将RSA私钥转换为byte
 func PrivateKeyToPem(privateKey *rsa.PrivateKey) []byte {
 	privateKeyBytes := x509.MarshalPKCS1PrivateKey(privateKey)
 	privateKeyBlock := &pem.Block{
@@ -21,7 +21,7 @@ func PrivateKeyToPem(privateKey *rsa.PrivateKey) []byte {
 	return pem.EncodeToMemory(privateKeyBlock)
 }
 
-// 将RSA公钥转换为byte
+// PublicKeyToPem 将RSA公钥转换为byte
 func PublicKeyToPem(publicKey *rsa.PublicKey) ([]byte, error) {
 	publicKeyBytes, err := x509.MarshalPKIXPublicKey(publicKey)
 	if err != nil {
@@ -34,7 +34,7 @@ func PublicKeyToPem(publicKey *rsa.PublicKey) ([]byte, error) {
 	return pem.EncodeToMemory(publicKeyBlock), nil
 }
 
-// 将byte转为私钥
+// ParsePriKey 将byte转为私钥
 func ParsePriKey(privateKey []byte) (*rsa.PrivateKey, error) {
 	privateKeyBlock, _ := pem.Decode(privateKey)
 	if privateKeyBlock == nil || privateKeyBlock.Type != "RSA PRIVATE KEY" {
@@ -47,7 +47,7 @@ func ParsePriKey(privateKey []byte) (*rsa.PrivateKey, error) {
 	return priKey, nil
 }
 
-// 将byte转换为RSA公钥
+// ParsePubKey 将byte转换为RSA公钥
 func ParsePubKey(publicKey []byte) (*rsa.PublicKey, error) {
 	publicKeyBlock, _ := pem.Decode(publicKey)
 	if publicKeyBlock == nil || publicKeyBlock.Type != "PUBLIC KEY" {
@@ -64,7 +64,7 @@ func ParsePubKey(publicKey []byte) (*rsa.PublicKey, error) {
 	return rsaPublicKey, nil
 }
 
-// 生成密钥对
+// GenerateRsaKeyStr 生成密钥对
 func GenerateRsaKeyStr(len int) (publicKey string, privateKey string, err error) {
 	pub, pri, err := GenerateRsaKey(len)
 	if err != nil {
@@ -75,7 +75,7 @@ func GenerateRsaKeyStr(len int) (publicKey string, privateKey string, err error)
 	return
 }
 
-// 生成密钥对
+// GenerateRsaKey 生成密钥对
 func GenerateRsaKey(len int) (publicKey []byte, privateKey []byte, err error) {
 	if len != 1024 && len != 4096 {
 		len = 2048
@@ -139,7 +139,7 @@ func RsaDecrypt(encryptedMsg, priKey []byte) ([]byte, error) {
 	return rsa.DecryptPKCS1v15(rand.Reader, privateKey, encryptedMsg)
 }
 
-// RsaSign 私钥加签
+// RSA_Sign RsaSign 私钥加签
 func RSA_Sign(priKey string, message []byte) ([]byte, error) {
 	return RsaSign([]byte(priKey), message)
 }

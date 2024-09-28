@@ -3,7 +3,7 @@ package httpUtil
 import "net/http"
 
 const (
-	HeaderSignature   = "signature"
+	HeaderSignature   = "Signature"
 	HeaderContentType = "Content-Type"
 
 	ContentTypeJson           = "application/json"

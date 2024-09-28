@@ -1,6 +1,6 @@
 package mapUtil
 
-// 聚合
+// Collect 聚合
 func Collect[K comparable, T any](m map[K][]T, choose func(x1, x2 T) T) map[K]T {
 	ret := make(map[K]T)
 	if len(m) == 0 {
