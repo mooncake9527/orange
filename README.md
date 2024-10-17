@@ -29,7 +29,40 @@ RPC 框架 grpc （开发中）
 持续集成部署 CICD jenkins, docker, kubernetes
 ```
 
-#### 使用orange脚手架快速开发项目
+#### 快速开始
+
+1. 安装xt 工具
+```
+go install github.com/mooncake9527/xt
+```
+
+2. 创建项目，例如helloworld 
+```
+xt new helloworld
+```
+
+3.修改配置文件
+修改resources/config.dev.yaml 配置文件，注意修改redis连接、数据库连接、日志路径等
+
+4.启动项目
+```
+cd helloworld
+go mod tidy
+go run main.go start -c resources/config.dev.yaml
+
+或者 编译之后
+
+go build -o helloworld
+./helloworld start -c resources/config.dev.yaml
+```
+
+5. 服务启动
+你会看到一个大大的皮卡丘
+像这样
+![](./doc/image.png)
+下面还打印了服务监听端口和swagger的地址
+
+#### 直接clone orange 进行开发
 
 [使用orange脚手架快速开发项目](./doc/how%20to%20use.md)
 

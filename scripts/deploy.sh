@@ -1,5 +1,5 @@
 #!/bin/bash
-project="open-platform"
+project="orange"
 chmod +x ./${project}
 echo "kill ${project} service"
 killall ${project}

@@ -10,7 +10,8 @@ build:
 
 .PHONY: build-doc
 build-doc:
-	@ swag init --parseDependency=true
+	@#swag init --parseDependency --parseDepth=6
+	@swag init --parseDependency=true
 
 # make build-docker-image
 build-docker-image:
